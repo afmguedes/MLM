@@ -5,54 +5,64 @@ namespace MLM.ConsoleApp
 {
     public class QueueManager
     {
-        private Queue<MicroLearning> Board;
+        private Queue<MicroLearning> MLQueue;
 
         public QueueManager()
         {
-            Board = new Queue<MicroLearning>();
+            MLQueue = new Queue<MicroLearning>();
+        }
+        public QueueManager(IEnumerable<MicroLearning> microLearnings)
+        {
+            MLQueue = new Queue<MicroLearning>(microLearnings);
         }
 
-        public void AddPersonToTheBoard(string newPerson)
+        public void AddPersonToTheQueue(string newPerson)
         {
             var microLearning = new MicroLearning(newPerson, DateTime.Now);
 
-            Board.Enqueue(microLearning);
+            MLQueue.Enqueue(microLearning);
         }
 
-        public void AddSession(MicroLearning nextSession)
+        public string WhoIsUpNext()
         {
-            Board.Enqueue(nextSession);
-        }
-
-        public string WhoIsNext()
-        {
-            var nextMicroLearning = Board.Dequeue();
+            var nextMicroLearning = MLQueue.Dequeue();
             return nextMicroLearning.Name;
         }
 
         public MicroLearning WhatIsNext()
         {
-            return Board.Dequeue();
+            return MLQueue.Dequeue();
         }
 
-        public void SkipMe()
+        //public void SkipMe()
+        //{
+        //    var nextSession = MLQueue.Dequeue();
+        //    MLQueue.Enqueue(nextSession);
+        //}
+
+        //public void PushToNextSlot()
+        //{
+        //    var nextSessionDate = MLQueue.Peek().Date;
+
+        //    var dayOftheWeek = GetNextValidSlot(nextSessionDate);
+
+        //    var daysToAdd = ((int) dayOftheWeek - (int)nextSessionDate.DayOfWeek + 7) % 7;
+
+        //    MLQueue.Peek().Date = nextSessionDate.AddDays(daysToAdd);
+        //}
+
+        public void PushMeToNextSlot()
         {
-            var nextSession = Board.Dequeue();
-            Board.Enqueue(nextSession);
+            var nextMicroLearningDate = MLQueue.Peek().Date;
+
+            var dayOftheWeek = GetNextValidSlot(nextMicroLearningDate);
+
+            var daysToAdd = ((int)dayOftheWeek - (int)nextMicroLearningDate.DayOfWeek + 7) % 7;
+
+            MLQueue.Peek().Date = nextMicroLearningDate.AddDays(daysToAdd);
         }
 
-        public void PushToNextSlot()
-        {
-            var nextSessionDate = Board.Peek().Date;
-
-            var dayOftheWeek = GetNextValidDayOftheWeek(nextSessionDate);
-
-            var daysToAdd = ((int) dayOftheWeek - (int)nextSessionDate.DayOfWeek + 7) % 7;
-
-            Board.Peek().Date = nextSessionDate.AddDays(daysToAdd);
-        }
-
-        private DayOfWeek GetNextValidDayOftheWeek(DateTime nextSessionDate)
+        private static DayOfWeek GetNextValidSlot(DateTime nextSessionDate)
         {
             switch (nextSessionDate.DayOfWeek)
             {
