@@ -30,7 +30,7 @@ namespace MLM.ConsoleApp
             return nextMicroLearning.Name;
         }
 
-        public MicroLearning WhatIsnext()
+        public MicroLearning WhatIsNext()
         {
             return Board.Dequeue();
         }
