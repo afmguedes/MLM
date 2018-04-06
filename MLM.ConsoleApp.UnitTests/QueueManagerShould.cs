@@ -15,9 +15,9 @@ namespace MLM.ConsoleApp.UnitTests
         public void ReturnNextPerson_WhenWhoIsUpNextIsCalled(string nextPerson)
         {
             var microLearning = new MicroLearning(nextPerson, new DateTime(2018, 3, 23));
-            var queueManager = new QueueManager(new List<MicroLearning>() { microLearning });
+            var sequenceOrganizer = new SequenceOrganizer(new List<MicroLearning>() { microLearning });
 
-            var actual = queueManager.WhoIsUpNext();
+            var actual = sequenceOrganizer.WhoIsUpNext();
 
             actual.Should().Be(nextPerson);
         }
@@ -27,11 +27,11 @@ namespace MLM.ConsoleApp.UnitTests
         [TestCase("Arun")]
         public void PersonIsAddedToTheQueue_WhenAddPersonToTheQueueIsCalled(string person)
         {
-            var queueManager = new QueueManager();
+            var sequenceOrganizer = new SequenceOrganizer();
 
-            queueManager.AddPersonToTheQueue(person);
+            sequenceOrganizer.AddPersonToTheQueue(person);
 
-            queueManager.WhoIsUpNext().Should().Be(person);
+            sequenceOrganizer.WhoIsUpNext().Should().Be(person);
         }
 
         [TestCase("André", "2018-03-23")]
@@ -40,9 +40,9 @@ namespace MLM.ConsoleApp.UnitTests
         public void ReturnNextMicroLearning_WhenWhatIsNextIsCalled(string nextPerson, DateTime nextDate)
         {
             var nextMicroLearning = new MicroLearning(nextPerson, nextDate);
-            var queueManager = new QueueManager(new List<MicroLearning>() { nextMicroLearning });
+            var sequenceOrganizer = new SequenceOrganizer(new List<MicroLearning>() { nextMicroLearning });
 
-            var actual = queueManager.WhatIsNext();
+            var actual = sequenceOrganizer.WhatIsNext();
 
             actual.Should().Be(nextMicroLearning);
         }
@@ -53,30 +53,30 @@ namespace MLM.ConsoleApp.UnitTests
         public void PushMicroLearningToNextValidSlot_WhenPushMeToNextSlotIsCalled(string nextPerson, DateTime nextDate, DateTime nextValidSlot)
         {
             var nextMicroLearning = new MicroLearning(nextPerson, nextDate);
-            var queueManager = new QueueManager(new List<MicroLearning>() { nextMicroLearning });
+            var sequenceOrganizer = new SequenceOrganizer(new List<MicroLearning>() { nextMicroLearning });
 
-            queueManager.PushMeToNextSlot();
+            sequenceOrganizer.PushMeToNextSlot();
 
-            queueManager.WhatIsNext().Date.Should().Be(nextValidSlot);
+            sequenceOrganizer.WhatIsNext().Date.Should().Be(nextValidSlot);
         }
 
         //[Test]
         //public void PutPersonAtTheBackOfTheQueue_WhenImDoneIsCalled()
         //{
-        //    var queueManager = new QueueManager();
-            
+        //    var sequenceOrganizer = new SequenceOrganizer();
+
         //}
 
         //[TestCaseSource(nameof(NextAndFollowingSessions))]
         //public void ReturnFollowingSession_WhenSkipMeIsCalled(MicroLearning nextSession, MicroLearning followingSession)
         //{
-        //    var queueManager = new QueueManager();
-        //    queueManager.AddSession(nextSession);
-        //    queueManager.AddSession(followingSession);
+        //    var sequenceOrganizer = new SequenceOrganizer();
+        //    sequenceOrganizer.AddSession(nextSession);
+        //    sequenceOrganizer.AddSession(followingSession);
 
-        //    queueManager.SkipMe();
+        //    sequenceOrganizer.SkipMe();
 
-        //    queueManager.WhatIsNext().Should().Be(followingSession);
+        //    sequenceOrganizer.WhatIsNext().Should().Be(followingSession);
         //}
 
         //private static IEnumerable NextAndFollowingSessions()
@@ -101,12 +101,12 @@ namespace MLM.ConsoleApp.UnitTests
         //    DateTime postponedDate)
         //{
         //    var nextSession = new MicroLearning(nextPerson, nextDate);
-        //    var queueManager = new QueueManager();
-        //    queueManager.AddSession(nextSession);
+        //    var sequenceOrganizer = new SequenceOrganizer();
+        //    sequenceOrganizer.AddSession(nextSession);
 
-        //    queueManager.PushToNextSlot();
+        //    sequenceOrganizer.PushToNextSlot();
 
-        //    queueManager.WhatIsNext().Date.Should().Be(postponedDate);
+        //    sequenceOrganizer.WhatIsNext().Date.Should().Be(postponedDate);
         //}
     }
 }
