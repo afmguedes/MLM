@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace MLM.ConsoleApp.UnitTests
 {
     [TestFixture]
-    public class QueueManagerShould
+    public class SequenceOrganizerShould
     {
         [TestCase("André")]
         [TestCase("Amanda")]
