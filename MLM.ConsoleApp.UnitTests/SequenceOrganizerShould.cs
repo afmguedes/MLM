@@ -15,7 +15,7 @@ namespace MLM.ConsoleApp.UnitTests
         public void ReturnNextPerson_WhenWhoIsUpNextIsCalled(string nextPerson)
         {
             var microLearning = new MicroLearning(nextPerson, new DateTime(2018, 3, 23));
-            var sequenceOrganizer = new SequenceOrganizer(new List<MicroLearning>() { microLearning });
+            var sequenceOrganizer = new SequenceOrganizer(new List<MicroLearning> {microLearning});
 
             var actual = sequenceOrganizer.WhoIsUpNext();
 
@@ -37,12 +37,12 @@ namespace MLM.ConsoleApp.UnitTests
         [TestCase("André", "2018-03-23")]
         [TestCase("Amanda", "2018-03-26")]
         [TestCase("Arun", "2018-03-28")]
-        public void ReturnNextMicroLearning_WhenWhatIsNextIsCalled(string nextPerson, DateTime nextDate)
+        public void ReturnNextMicroLearning_WhenWhatIsUpNextIsCalled(string nextPerson, DateTime nextDate)
         {
             var nextMicroLearning = new MicroLearning(nextPerson, nextDate);
-            var sequenceOrganizer = new SequenceOrganizer(new List<MicroLearning>() { nextMicroLearning });
+            var sequenceOrganizer = new SequenceOrganizer(new List<MicroLearning> {nextMicroLearning});
 
-            var actual = sequenceOrganizer.WhatIsNext();
+            var actual = sequenceOrganizer.WhatIsUpNext();
 
             actual.Should().Be(nextMicroLearning);
         }
@@ -50,14 +50,113 @@ namespace MLM.ConsoleApp.UnitTests
         [TestCase("André", "2018-03-23", "2018-03-26")]
         [TestCase("Amanda", "2018-03-26", "2018-03-28")]
         [TestCase("Arun", "2018-03-28", "2018-03-30")]
-        public void PushMicroLearningToNextValidSlot_WhenPushMeToNextSlotIsCalled(string nextPerson, DateTime nextDate, DateTime nextValidSlot)
+        public void PushNextMicroLearningToNextValidSlot_WhenPushMeToNextSlotIsCalled(string nextPerson, DateTime nextDate,
+            DateTime nextValidSlot)
         {
             var nextMicroLearning = new MicroLearning(nextPerson, nextDate);
-            var sequenceOrganizer = new SequenceOrganizer(new List<MicroLearning>() { nextMicroLearning });
+            var sequenceOrganizer = new SequenceOrganizer(new List<MicroLearning> {nextMicroLearning});
 
             sequenceOrganizer.PushMeToNextSlot();
 
-            sequenceOrganizer.WhatIsNext().Date.Should().Be(nextValidSlot);
+            sequenceOrganizer.WhatIsUpNext().Date.Should().Be(nextValidSlot);
+        }
+
+        //[TestCaseSource(nameof(SequenceBeforePush))]
+        //public void PushAllMicroLearningsBackOneSlot_WhenPushMeToNextSlotIsCalled(Queue<MicroLearning> actualSequence,
+        //    Queue<MicroLearning> expectedSequence)
+        //{
+        //    var sequenceOrganizer = new SequenceOrganizer(actualSequence);
+
+        //    sequenceOrganizer.PushMeToNextSlot();
+
+        //    sequenceOrganizer.Should().BeEquivalentTo(new SequenceOrganizer(expectedSequence));
+        //}
+
+        private static IEnumerable SequenceBeforePush()
+        {
+            var testcases = new List<TestCase>
+                            {
+                                new TestCase
+                                {
+                                    ActualSequence =
+                                        new Queue<MicroLearning>(
+                                            new[]
+                                            {
+                                                new MicroLearning(
+                                                    "André", new DateTime(2018, 4, 6)),
+                                                new MicroLearning(
+                                                    "Amanda", new DateTime(2018, 4, 9))
+                                            }),
+                                    ExpectedSequence =
+                                        new Queue<MicroLearning>(
+                                            new[]
+                                            {
+                                                new MicroLearning(
+                                                    "André", new DateTime(2018, 4, 9)),
+                                                new MicroLearning(
+                                                    "Amanda", new DateTime(2018, 4, 11))
+                                            })
+                                },
+                                new TestCase
+                                {
+                                    ActualSequence =
+                                        new Queue<MicroLearning>(
+                                            new[]
+                                            {
+                                                new MicroLearning(
+                                                    "André", new DateTime(2018, 4, 6)),
+                                                new MicroLearning(
+                                                    "Amanda", new DateTime(2018, 4, 9)),
+                                                new MicroLearning(
+                                                    "Arun", new DateTime(2018, 4, 11))
+                                            }),
+                                    ExpectedSequence =
+                                        new Queue<MicroLearning>(
+                                            new[]
+                                            {
+                                                new MicroLearning(
+                                                    "André", new DateTime(2018, 4, 9)),
+                                                new MicroLearning(
+                                                    "Amanda", new DateTime(2018, 4, 11)),
+                                                new MicroLearning(
+                                                    "Arun", new DateTime(2018, 4, 13))
+                                            })
+                                },
+                                new TestCase
+                                {
+                                    ActualSequence =
+                                        new Queue<MicroLearning>(
+                                            new[]
+                                            {
+                                                new MicroLearning(
+                                                    "André", new DateTime(2018, 4, 6)),
+                                                new MicroLearning(
+                                                    "Amanda", new DateTime(2018, 4, 9)),
+                                                new MicroLearning(
+                                                    "Arun", new DateTime(2018, 4, 11)),
+                                                new MicroLearning(
+                                                    "Darren", new DateTime(2018, 4, 13))
+                                            }),
+                                    ExpectedSequence =
+                                        new Queue<MicroLearning>(
+                                            new[]
+                                            {
+                                                new MicroLearning(
+                                                    "André", new DateTime(2018, 4, 9)),
+                                                new MicroLearning(
+                                                    "Amanda", new DateTime(2018, 4, 11)),
+                                                new MicroLearning(
+                                                    "Arun", new DateTime(2018, 4, 13)),
+                                                new MicroLearning(
+                                                    "Darren", new DateTime(2018, 4, 16))
+                                            })
+                                }
+                            };
+
+            foreach (var testcase in testcases)
+            {
+                yield return new TestCaseData(testcase.ActualSequence, testcase.ExpectedSequence);
+            }
         }
 
         //[Test]
@@ -76,7 +175,7 @@ namespace MLM.ConsoleApp.UnitTests
 
         //    sequenceOrganizer.SkipMe();
 
-        //    sequenceOrganizer.WhatIsNext().Should().Be(followingSession);
+        //    sequenceOrganizer.WhatIsUpNext().Should().Be(followingSession);
         //}
 
         //private static IEnumerable NextAndFollowingSessions()
@@ -106,7 +205,13 @@ namespace MLM.ConsoleApp.UnitTests
 
         //    sequenceOrganizer.PushToNextSlot();
 
-        //    sequenceOrganizer.WhatIsNext().Date.Should().Be(postponedDate);
+        //    sequenceOrganizer.WhatIsUpNext().Date.Should().Be(postponedDate);
         //}
+
+        private class TestCase
+        {
+            public Queue<MicroLearning> ActualSequence;
+            public Queue<MicroLearning> ExpectedSequence;
+        }
     }
 }

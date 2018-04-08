@@ -5,74 +5,61 @@ namespace MLM.ConsoleApp
 {
     public class SequenceOrganizer
     {
-        private Queue<MicroLearning> MicroLearningSequence;
+        private readonly Queue<MicroLearning> microLearningSequence;
+
+        private readonly Dictionary<DayOfWeek, DayOfWeek> validDays =
+            new Dictionary<DayOfWeek, DayOfWeek>
+            {
+                {DayOfWeek.Monday, DayOfWeek.Wednesday},
+                {DayOfWeek.Tuesday, DayOfWeek.Wednesday},
+                {DayOfWeek.Wednesday, DayOfWeek.Friday},
+                {DayOfWeek.Thursday, DayOfWeek.Friday},
+                {DayOfWeek.Friday, DayOfWeek.Monday},
+                {DayOfWeek.Saturday, DayOfWeek.Monday},
+                {DayOfWeek.Sunday, DayOfWeek.Monday}
+            };
 
         public SequenceOrganizer()
         {
-            MicroLearningSequence = new Queue<MicroLearning>();
+            microLearningSequence = new Queue<MicroLearning>();
         }
+
         public SequenceOrganizer(IEnumerable<MicroLearning> microLearnings)
         {
-            MicroLearningSequence = new Queue<MicroLearning>(microLearnings);
+            microLearningSequence = new Queue<MicroLearning>(microLearnings);
         }
 
         public void AddPersonToTheQueue(string newPerson)
         {
             var microLearning = new MicroLearning(newPerson, DateTime.Now);
 
-            MicroLearningSequence.Enqueue(microLearning);
+            microLearningSequence.Enqueue(microLearning);
         }
 
         public string WhoIsUpNext()
         {
-            var nextMicroLearning = MicroLearningSequence.Dequeue();
+            var nextMicroLearning = microLearningSequence.Dequeue();
             return nextMicroLearning.Name;
         }
 
-        public MicroLearning WhatIsNext()
+        public MicroLearning WhatIsUpNext()
         {
-            return MicroLearningSequence.Dequeue();
+            return microLearningSequence.Dequeue();
         }
-
-        //public void SkipMe()
-        //{
-        //    var nextSession = MicroLearningSequence.Dequeue();
-        //    MicroLearningSequence.Enqueue(nextSession);
-        //}
-
-        //public void PushToNextSlot()
-        //{
-        //    var nextSessionDate = MicroLearningSequence.Peek().Date;
-
-        //    var dayOftheWeek = GetNextValidSlot(nextSessionDate);
-
-        //    var daysToAdd = ((int) dayOftheWeek - (int)nextSessionDate.DayOfWeek + 7) % 7;
-
-        //    MicroLearningSequence.Peek().Date = nextSessionDate.AddDays(daysToAdd);
-        //}
 
         public void PushMeToNextSlot()
         {
-            var nextMicroLearningDate = MicroLearningSequence.Peek().Date;
-            var dayOftheWeek = GetNextValidSlot(nextMicroLearningDate);
-            var daysToAdd = ((int)dayOftheWeek - (int)nextMicroLearningDate.DayOfWeek + 7) % 7;
+            var nextMicroLearning = microLearningSequence.Peek();
 
-            MicroLearningSequence.Peek().Date = nextMicroLearningDate.AddDays(daysToAdd);
+            nextMicroLearning.Date = GetNextValidSlotAfter(nextMicroLearning.Date);
         }
 
-        private static DayOfWeek GetNextValidSlot(DateTime nextSessionDate)
+        private DateTime GetNextValidSlotAfter(DateTime nextMicroLearningDate)
         {
-            switch (nextSessionDate.DayOfWeek)
-            {
-                case DayOfWeek.Monday:
-                case DayOfWeek.Tuesday:
-                    return DayOfWeek.Wednesday;
-                case DayOfWeek.Wednesday:
-                case DayOfWeek.Thursday:
-                    return DayOfWeek.Friday;
-                default:
-                    return DayOfWeek.Monday;
-            }
+            var dayOftheWeek = validDays[nextMicroLearningDate.DayOfWeek];
+            var daysToAdd = ((int)dayOftheWeek - (int)nextMicroLearningDate.DayOfWeek + 7) % 7;
+
+            return nextMicroLearningDate.AddDays(daysToAdd);
         }
     }
 }
