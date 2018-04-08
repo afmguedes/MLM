@@ -5,7 +5,7 @@ namespace MLM.ConsoleApp
 {
     public class SequenceOrganizer
     {
-        private readonly Queue<MicroLearning> microLearningSequence;
+        public Queue<MicroLearning> microLearningSequence;
 
         private readonly Dictionary<DayOfWeek, DayOfWeek> validDays =
             new Dictionary<DayOfWeek, DayOfWeek>
@@ -49,9 +49,8 @@ namespace MLM.ConsoleApp
 
         public void PushMeToNextSlot()
         {
-            var nextMicroLearning = microLearningSequence.Peek();
-
-            nextMicroLearning.Date = GetNextValidSlotAfter(nextMicroLearning.Date);
+            foreach (var microLearning in microLearningSequence)
+                microLearning.Date = GetNextValidSlotAfter(microLearning.Date);
         }
 
         private DateTime GetNextValidSlotAfter(DateTime nextMicroLearningDate)

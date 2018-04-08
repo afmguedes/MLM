@@ -61,16 +61,16 @@ namespace MLM.ConsoleApp.UnitTests
             sequenceOrganizer.WhatIsUpNext().Date.Should().Be(nextValidSlot);
         }
 
-        //[TestCaseSource(nameof(SequenceBeforePush))]
-        //public void PushAllMicroLearningsBackOneSlot_WhenPushMeToNextSlotIsCalled(Queue<MicroLearning> actualSequence,
-        //    Queue<MicroLearning> expectedSequence)
-        //{
-        //    var sequenceOrganizer = new SequenceOrganizer(actualSequence);
+        [TestCaseSource(nameof(SequenceBeforePush))]
+        public void PushAllMicroLearningsBackOneSlot_WhenPushMeToNextSlotIsCalled(Queue<MicroLearning> actualSequence,
+            Queue<MicroLearning> expectedSequence)
+        {
+            var sequenceOrganizer = new SequenceOrganizer(actualSequence);
 
-        //    sequenceOrganizer.PushMeToNextSlot();
+            sequenceOrganizer.PushMeToNextSlot();
 
-        //    sequenceOrganizer.Should().BeEquivalentTo(new SequenceOrganizer(expectedSequence));
-        //}
+            sequenceOrganizer.Should().BeEquivalentTo(new SequenceOrganizer(expectedSequence));
+        }
 
         private static IEnumerable SequenceBeforePush()
         {
