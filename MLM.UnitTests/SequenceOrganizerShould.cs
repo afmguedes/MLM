@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace MLM.ConsoleApp.UnitTests
+namespace MLM.UnitTests
 {
     [TestFixture]
     public class SequenceOrganizerShould

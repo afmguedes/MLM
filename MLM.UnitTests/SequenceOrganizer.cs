@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MLM.ConsoleApp
+namespace MLM.UnitTests
 {
     public class SequenceOrganizer
     {

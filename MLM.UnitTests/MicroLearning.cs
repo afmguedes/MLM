@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MLM.ConsoleApp
+namespace MLM.UnitTests
 {
     public class MicroLearning
     {
