@@ -4,12 +4,12 @@ namespace MLM.UnitTests
 {
     public class MicroLearning
     {
-        public string Name { get; private set; }
+        public string Name { get; }
         public DateTime Date { get; set; }
-
-        public MicroLearning(string name, DateTime date)
+        
+        public MicroLearning(Person person, DateTime date)
         {
-            Name = name;
+            Name = person.Name;
             Date = date;
         }
     }
