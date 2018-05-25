@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -15,8 +13,7 @@ namespace MLM.UnitTests
             var nextPerson = new Person("Andre");
             var nextDate = Helper.GetNextAvailableDate();
             var expectedMicroLearning = new MicroLearning(nextPerson, nextDate);
-            var queueOrganizer = new QueueOrganizer();
-            queueOrganizer.AddPersonToTheQueue(nextPerson);
+            var queueOrganizer = new QueueOrganizerBuilder().WithPerson(nextPerson).Build();
 
             var actual = queueOrganizer.WhoIsUpNext();
 
@@ -30,9 +27,7 @@ namespace MLM.UnitTests
             var person2 = new Person("Amanda");
             var expectedDate = Helper.GetNextAvailableDate();
             var expectedMicroLearning = new MicroLearning(person2, expectedDate);
-            var queueOrganizer = new QueueOrganizer();
-            queueOrganizer.AddPersonToTheQueue(person1);
-            queueOrganizer.AddPersonToTheQueue(person2);
+            var queueOrganizer = new QueueOrganizerBuilder().WithPerson(person1).WithPerson(person2).Build();
 
             queueOrganizer.SkipMe();
 
@@ -45,9 +40,7 @@ namespace MLM.UnitTests
         {
             var person1 = new Person("Andre");
             var person2 = new Person("Amanda");
-            var queueOrganizer = new QueueOrganizer();
-            queueOrganizer.AddPersonToTheQueue(person1);
-            queueOrganizer.AddPersonToTheQueue(person2);
+            var queueOrganizer = new QueueOrganizerBuilder().WithPerson(person1).WithPerson(person2).Build();
 
             queueOrganizer.SkipMe();
 

@@ -6,7 +6,7 @@ namespace MLM.UnitTests
     {
         public string Name { get; }
         public DateTime Date { get; set; }
-        
+
         public MicroLearning(Person person, DateTime date)
         {
             Name = person.Name;

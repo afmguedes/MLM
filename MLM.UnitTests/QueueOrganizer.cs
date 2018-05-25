@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MLM.UnitTests
 {
     public class QueueOrganizer
     {
-        private Queue<Person> peopleQueue;
+        private readonly Queue<Person> peopleQueue;
 
-        public QueueOrganizer()
+        public QueueOrganizer(Queue<Person> queue)
         {
-            peopleQueue = new Queue<Person>();
-        }
-
-        public void AddPersonToTheQueue(Person newPerson)
-        {
-            peopleQueue.Enqueue(newPerson);
+            peopleQueue = queue;
         }
 
         public MicroLearning WhoIsUpNext()
