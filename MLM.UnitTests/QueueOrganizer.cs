@@ -1,67 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MLM.UnitTests
 {
     public class QueueOrganizer
     {
-        public Queue<Person> PeopleQueue;
-        
+        private Queue<Person> peopleQueue;
+
         public QueueOrganizer()
         {
-            PeopleQueue = new Queue<Person>();
+            peopleQueue = new Queue<Person>();
         }
 
         public void AddPersonToTheQueue(Person newPerson)
         {
-            PeopleQueue.Enqueue(newPerson);
+            peopleQueue.Enqueue(newPerson);
         }
 
         public MicroLearning WhoIsUpNext()
         {
-            var nextPerson = PeopleQueue.Dequeue();
+            var nextPerson = peopleQueue.Dequeue();
+            var nextDate = Helper.GetNextAvailableDate();
 
-            return new MicroLearning(nextPerson, new DateTime(2018, 4, 16));
+            return new MicroLearning(nextPerson, nextDate);
         }
 
-        //public void AddPersonToTheQueue(string newPerson)
-        //{
-        //    var microLearning = new MicroLearning(newPerson, DateTime.Now);
-        //    PeopleQueue.Enqueue(microLearning);
-        //}
+        public void SkipMe()
+        {
+            var personSkipped = peopleQueue.Dequeue();
 
-        //public MicroLearning WhatIsUpNext()
-        //{
-        //    return PeopleQueue.Dequeue();
-        //}
+            peopleQueue.Enqueue(personSkipped);
+        }
 
-        //public void PushMeToNextSlot()
-        //{
-        //    foreach (var microLearning in PeopleQueue)
-        //    {
-        //        microLearning.Date = GetNextValidSlotAfter(microLearning.Date);
-        //    }
-        //}
+        public List<MicroLearning> LookAtFullQueue()
+        {
+            var currentDay = DateTime.Now;
+            var fullQueue = new List<MicroLearning>();
 
-        //private DateTime GetNextValidSlotAfter(DateTime nextMicroLearningDate)
-        //{
-        //    var dayOftheWeek = validDays[nextMicroLearningDate.DayOfWeek];
-        //    var daysToAdd = ((int)dayOftheWeek - (int)nextMicroLearningDate.DayOfWeek + 7) % 7;
+            foreach (var person in peopleQueue)
+            {
+                var nextValidDay = Helper.GetNextAvailableDate(currentDay);
+                fullQueue.Add(new MicroLearning(person, nextValidDay));
+                currentDay = nextValidDay;
+            }
 
-        //    return nextMicroLearningDate.AddDays(daysToAdd);
-        //}
-
-        //private readonly Dictionary<DayOfWeek, DayOfWeek> validDays =
-        //    new Dictionary<DayOfWeek, DayOfWeek>
-        //    {
-        //        {DayOfWeek.Monday, DayOfWeek.Wednesday},
-        //        {DayOfWeek.Tuesday, DayOfWeek.Wednesday},
-        //        {DayOfWeek.Wednesday, DayOfWeek.Friday},
-        //        {DayOfWeek.Thursday, DayOfWeek.Friday},
-        //        {DayOfWeek.Friday, DayOfWeek.Monday},
-        //        {DayOfWeek.Saturday, DayOfWeek.Monday},
-        //        {DayOfWeek.Sunday, DayOfWeek.Monday}
-        //    };
-        
+            return fullQueue;
+        }
     }
 }
