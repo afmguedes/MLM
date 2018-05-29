@@ -14,26 +14,31 @@ namespace MLM.UnitTests
                 DayOfWeek.Friday
             };
 
-        public static DateTime GetNextAvailableDate(DateTime today)
+        public static DateTime GetNextValidDate(DateTime currentDay)
         {
             var nextValidDoW = ValidDays.First();
 
             foreach (var dayOfWeek in ValidDays)
             {
-                if (today.DayOfWeek < dayOfWeek)
+                if (currentDay.DayOfWeek < dayOfWeek)
                 {
                     nextValidDoW = dayOfWeek;
                     break;
                 }
             }
 
-            var daysToAdd = (nextValidDoW - today.DayOfWeek + 7) % 7;
-            return today.AddDays(daysToAdd).Date;
+            var daysToAdd = (nextValidDoW - currentDay.DayOfWeek + 7) % 7;
+            return currentDay.AddDays(daysToAdd).Date;
         }
 
-        public static DateTime GetNextAvailableDate()
+        public static DateTime GetNextValidDate()
         {
-            return GetNextAvailableDate(DateTime.Now);
+            return GetNextValidDate(DateTime.Now);
+        }
+
+        public static DateTime GetNextWorkingDay(DateTime currentDay)
+        {
+            return currentDay;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace MLM.UnitTests
         public MicroLearning WhoIsUpNext()
         {
             var nextPerson = peopleQueue.Dequeue();
-            var nextDate = Helper.GetNextAvailableDate();
+            var nextDate = Helper.GetNextValidDate();
 
             return new MicroLearning(nextPerson, nextDate);
         }
@@ -34,7 +34,7 @@ namespace MLM.UnitTests
 
             foreach (var person in peopleQueue)
             {
-                var nextValidDay = Helper.GetNextAvailableDate(currentDay);
+                var nextValidDay = Helper.GetNextValidDate(currentDay);
                 fullQueue.Add(new MicroLearning(person, nextValidDay));
                 currentDay = nextValidDay;
             }

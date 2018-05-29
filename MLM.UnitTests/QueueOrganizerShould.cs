@@ -11,7 +11,7 @@ namespace MLM.UnitTests
         public void ReturnExpectedMicroLearning_WhenWhoIsUpNextIsCalled()
         {
             var nextPerson = new Person("Andre");
-            var nextDate = Helper.GetNextAvailableDate();
+            var nextDate = Helper.GetNextValidDate();
             var expectedMicroLearning = new MicroLearning(nextPerson, nextDate);
             var queueOrganizer = new QueueOrganizerBuilder().WithPerson(nextPerson).Build();
 
@@ -25,7 +25,7 @@ namespace MLM.UnitTests
         {
             var person1 = new Person("Andre");
             var person2 = new Person("Amanda");
-            var expectedDate = Helper.GetNextAvailableDate();
+            var expectedDate = Helper.GetNextValidDate();
             var expectedMicroLearning = new MicroLearning(person2, expectedDate);
             var queueOrganizer = new QueueOrganizerBuilder().WithPerson(person1).WithPerson(person2).Build();
 
@@ -46,6 +46,13 @@ namespace MLM.UnitTests
 
             var actual = queueOrganizer.LookAtFullQueue().Last().Name;
             actual.Should().Be(person1.Name);
+        }
+
+        [Test]
+        public void PostponeToNextWorkingDay_WhenPostponeMeIsCalled()
+        {
+            var person1 = new Person("Andre");
+            var queueOrganizer = new QueueOrganizerBuilder().WithPerson(person1).Build();
         }
     }
 }
